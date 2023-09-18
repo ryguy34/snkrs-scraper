@@ -1,17 +1,23 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const snkrsDropInfo = require("./vo/snkrsDropInfo");
+const SnkrsDropInfo = require("./vo/snkrsDropInfo");
 const constants = require("./constants");
+const Utility = require("./utility");
 
 class SNKRS {
-	constructor() {
-		this.snkrsDropInfo = new snkrsDropInfo();
-	}
+	constructor() {}
 
-	async getSnkrsDropInfo() {
+	async parseSnkrsDropInfo() {
+		var itemsReleasing = [];
+
 		try {
-			const response = await axios.get(constants.SNKRS_URL, constants.params);
+			const response = await axios.get(
+				constants.SNKRS_URL,
+				constants.params
+			);
 			const $ = cheerio.load(response.data);
+
+			return itemsReleasing;
 		} catch (error) {
 			console.log("Some error: " + error);
 		}

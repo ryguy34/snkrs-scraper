@@ -1,9 +1,12 @@
-class snkrsDropInfo {
+class SnkrsDropInfo {
 	constructor(title, imageUrl, channelName) {
 		this.channelName = channelName;
 		this.title = title;
-		this.imageUrl = imageUrl;
+		this.price = price;
+		this.availableDate = this.availableDate;
+		this.description = this.description;
+		this.images = [];
 	}
 }
 
-module.exports = snkrsDropInfo;
+module.exports = SnkrsDropInfo;

@@ -123,6 +123,17 @@ async function mainPalaceNotifications() {
 	}
 }
 
+async function mainSnkrsNotifications() {
+	var tomorrowDate = Utility.getTomorrowsDate();
+	const snkrsDrops = [];
+
+	try {
+		snkrsDrops = snkrs.parseSnkrsDropInfo();
+	} catch (error) {
+		log.error(error);
+	}
+}
+
 client.on("ready", () => {
 	console.log("Bot is ready");
 
@@ -138,5 +149,12 @@ client.on("ready", () => {
 		console.log("Running Palace cron job");
 		mainPalaceNotifications();
 		console.log("Palace drops are done");
+	});
+
+	//runs everyday at 8PM
+	cron.schedule("0 20 * * *", () => {
+		console.log("Running SNKRS cron job");
+		mainSnkrsNotifications();
+		console.log("SNKRS drops are done");
 	});
 });
