@@ -36,9 +36,8 @@ class SNKRS {
 			const res = await axios(options);
 			const $ = cheerio.load(res.data);
 
-			//const bodyContent = $("body").html();
-			const root = $.root();
-			console.log(root);
+			const rootElement = $("#root");
+			console.log(rootElement.html());
 
 			// $(".product-card").each((_, ele) => {
 			// 	//var link = $(ele).find("a").attr("href");
