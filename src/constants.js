@@ -1,5 +1,18 @@
 module.exports = Object.freeze({
-	SNKRS_URL: "https://www.nike.com/launch?s=upcoming",
+	SNKRS: {
+		URL: "https://nike.com/launch?s=upcoming",
+		CATEGORY_ID: "915088080699023401",
+	},
+	SUPREME: {
+		COMMUNITY_BASE_URL: "https://www.supremecommunity.com",
+		STORE_BASE_URL: "https://us.supreme.com/",
+		CATEGORY_ID: "867052008094826546",
+	},
+	PALACE: {
+		COMMUNITY_BASE_URL: "https://www.palacecmty.com",
+		STORE_BASE_URL: "https://shop-usa.palaceskateboards.com",
+		CATEGORY_ID: "873011958591418448",
+	},
 	SUPREME_COMMUNITY_BASE_URL: "https://www.supremecommunity.com",
 	PALACE_COMMUNITY_BASE_URL: "https://www.palacecmty.com",
 	SUPREME_BASE_URL: "https://us.supreme.com/",
@@ -10,8 +23,14 @@ module.exports = Object.freeze({
 	params: {
 		headers: {
 			"User-Agent":
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (HTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 			"accept-encoding": "*",
+		},
+	},
+	params1: {
+		headers: {
+			Accept: "*/*",
+			Connection: "keep-alive",
 		},
 	},
 });

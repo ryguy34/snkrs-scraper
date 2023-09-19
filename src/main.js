@@ -124,17 +124,17 @@ async function mainPalaceNotifications() {
 }
 
 async function mainSnkrsNotifications() {
-	var tomorrowDate = Utility.getTomorrowsDate();
-	const snkrsDrops = [];
+	var tomorrowsDate = Utility.getTomorrowsDate();
+	var snkrsDrops = [];
 
 	try {
-		snkrsDrops = snkrs.parseSnkrsDropInfo();
+		snkrsDrops = await snkrs.parseSnkrsDropInfo(tomorrowsDate);
 	} catch (error) {
-		log.error(error);
+		console.error(error);
 	}
 }
 
-client.on("ready", () => {
+client.on("ready", async () => {
 	console.log("Bot is ready");
 
 	//runs every Wednesday at 8PM
@@ -152,9 +152,9 @@ client.on("ready", () => {
 	});
 
 	//runs everyday at 8PM
-	cron.schedule("0 20 * * *", () => {
-		console.log("Running SNKRS cron job");
-		mainSnkrsNotifications();
-		console.log("SNKRS drops are done");
-	});
+	//cron.schedule("0 20 * * *", () => {
+	console.log("Running SNKRS cron job");
+	await mainSnkrsNotifications();
+	console.log("SNKRS drops are done");
+	//});
 });
