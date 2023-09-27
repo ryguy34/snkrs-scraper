@@ -11,15 +11,9 @@ class SNKRS {
 	async parseSnkrsDropInfo(tomorrowsDate) {
 		var itemsReleasing = [];
 		const options = {
-			url: "https://nike.com/launch?s=upcoming",
-			headers: {
-				Accept:
-					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-				"Accept-Language": "en-US,en;q=0.5",
-				"Accept-Encoding": "gzip, deflate, br",
-				"User-Agent":
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36",
-			},
+			method: "get",
+			url: constants.SNKRS.URL,
+			headers: constants.SNKRS.HEADERS,
 			responseType: "arraybuffer",
 			transformResponse: [
 				(data) => {
@@ -27,7 +21,8 @@ class SNKRS {
 						// Check if data is gzip-encoded
 						return zlib.gunzipSync(data).toString("utf8");
 					}
-					return data.toString("utf-8"); // Assume it's utf8-encoded otherwise
+					// Assume it's utf8-encoded otherwise
+					return data.toString("utf-8");
 				},
 			],
 		};
