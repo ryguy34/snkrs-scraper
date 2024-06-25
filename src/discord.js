@@ -144,6 +144,47 @@ class Discord {
 
 		return category;
 	}
+
+	async cleanUpOldReleasesByMonthAndDay(client, dateToday, categoryId) {
+		const guild = client.guilds.cache.get(process.env.SERVER_ID);
+		const monthDayToday = dateToday.getMonth() * 100 + dateToday.getDate();
+
+		const releaseList = guild.channels.cache.filter((channel) => {
+			return channel.parentId === categoryId;
+		});
+
+		const oldReleasesList = releaseList.filter((channel) => {
+			const channelDateList = channel.name.split("-");
+			const channelDate = new Date(
+				`${dateToday.getFullYear()}-${channelDateList[0]}-${
+					channelDateList[1]
+				}`
+			);
+			const monthDayChannelDay =
+				(channelDate.getMonth() + 1) * 100 + channelDate.getDate();
+
+			// TODO: need to fix date comparison... seems to do any date but delete works
+			return dateToday > monthDayChannelDay;
+		});
+
+		oldReleasesList.map(async (oldChannel) => {
+			try {
+				const channelToRemove = await guild.channels.fetch(oldChannel.id);
+				if (channelToRemove) {
+					await channelToRemove.delete();
+					console.log(
+						`Channel ${channelToRemove.name} has been successfully removed.`
+					);
+				} else {
+					console.log(`Channel with ID ${channelId} not found.`);
+				}
+			} catch (error) {
+				console.error("Error deleting channel(s):", error);
+			}
+		});
+
+		console.log("Done deleting old releases");
+	}
 }
 
 module.exports = Discord;

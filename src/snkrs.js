@@ -39,7 +39,7 @@ class SNKRS {
 			// 	console.log(ele);
 			// });
 		} catch (error) {
-			console.error(error);
+			console.error("Error parsing SNKRS release: " + error);
 		}
 
 		return itemsReleasing;

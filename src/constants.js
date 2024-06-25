@@ -37,4 +37,7 @@ module.exports = Object.freeze({
 			"accept-encoding": "*",
 		},
 	},
+	TEST: {
+		CATEGORY_ID: "1145474605205688412",
+	},
 });
