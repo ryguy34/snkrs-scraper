@@ -1,3 +1,5 @@
+import { Channel, Client } from "discord.js";
+
 require("dotenv").config();
 
 const fs = require("fs");
@@ -14,7 +16,7 @@ class Discord {
 	 * @param {*} siteName
 	 * @returns
 	 */
-	async sendDropInfo(textChannelInfo, channel, siteName) {
+	async sendDropInfo(textChannelInfo, channel: Channel, siteName: string) {
 		let channelMessage = "";
 		if (siteName === "Supreme") {
 			channelMessage = textChannelInfo.openingMessage.replace(
@@ -65,7 +67,11 @@ class Discord {
 	 * @param {*} channelName
 	 * @returns
 	 */
-	async createTextChannel(client, category, channelName) {
+	async createTextChannel(
+		client: Client,
+		category: string,
+		channelName: string
+	) {
 		const guild = client.guilds.cache.get(process.env.SERVER_ID);
 
 		if (!guild) {
@@ -94,7 +100,11 @@ class Discord {
 	 * @param {*} name
 	 * @returns
 	 */
-	async doesChannelExistUnderCategory(client, channelName, categoryId) {
+	async doesChannelExistUnderCategory(
+		client: Client,
+		channelName: string,
+		categoryId: string
+	) {
 		console.log(`Searching for channel: ${channelName}`);
 
 		return new Promise((resolve) => {
@@ -127,7 +137,10 @@ class Discord {
 	 * @param {*} partialCategoryName
 	 * @returns
 	 */
-	async getFullCategoryNameBySubstring(client, partialCategoryName) {
+	async getFullCategoryNameBySubstring(
+		client: Client,
+		partialCategoryName: string
+	) {
 		const guild = client.guilds.cache.get(process.env.SERVER_ID);
 
 		const category = guild.channels.cache.find(

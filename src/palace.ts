@@ -1,13 +1,14 @@
+import "axios";
+import "cheerio";
+
 const constants = require("./constants");
-const axios = require("axios");
-const cheerio = require("cheerio");
 const PalaceDropInfo = require("./vo/palaceDropInfo");
 const PalaceTextChannelInfo = require("./vo/palaceTextChannelInfo");
 
 class Palace {
 	constructor() {}
 
-	async parsePalaceDrop(currentWeekFridayDate) {
+	async parsePalaceDrop(currentWeekFridayDate: string) {
 		var palaceDiscordTextChannelInfo = new PalaceTextChannelInfo();
 		var productList = [];
 
@@ -35,7 +36,7 @@ class Palace {
 			palaceDiscordTextChannelInfo.channelName = channelName;
 			palaceDiscordTextChannelInfo.openingMessage = title;
 
-			$(".catalog-item").each((_, ele) => {
+			$(".catalog-item").each((_: number, ele: any) => {
 				var palaceDropInfo = new PalaceDropInfo();
 				var itemId = $(ele).find("a").attr("data-itemid");
 				var itemSlug = $(ele).find("a").attr("data-itemslug");
