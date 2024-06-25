@@ -9,17 +9,7 @@ class Utility {
 		return new Date().getFullYear();
 	}
 
-	static getCurrentSeason() {
-		const todaysDate = new Date();
-		const currentYear = todaysDate.getFullYear();
-		if (todaysDate >= new Date().setFullYear(currentYear, 7, 1)) {
-			return "fall-winter";
-		} else {
-			return "spring-summer";
-		}
-	}
-
-	static getThursdayOfCurrentWeek() {
+	static getThursdayOfCurrentWeek(): string {
 		const today = new Date();
 		const currentDayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
 		const daysUntilThursday = (4 - currentDayOfWeek + 7) % 7; // Calculate how many days to Thursday

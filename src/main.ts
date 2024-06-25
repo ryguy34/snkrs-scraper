@@ -1,20 +1,19 @@
-require("dotenv").config();
+import "dotenv/config";
+import { Client, GatewayIntentBits } from "discord.js";
+import "node-cron";
 
 const Discord = require("./discord");
-const DiscordJS = require("discord.js");
 const SNKRS = require("./snkrs");
 const Supreme = require("./supreme");
 const Palace = require("./palace");
 const Utility = require("./utility");
-const cron = require("node-cron");
-const { GatewayIntentBits } = require("discord.js");
 const constants = require("./constants");
 
 const snkrs = new SNKRS();
 const supreme = new Supreme();
 const discord = new Discord();
 const palace = new Palace();
-const client = new DiscordJS.Client({
+const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
@@ -141,18 +140,18 @@ client.on("ready", async () => {
 	console.log("Bot is ready");
 
 	//runs every Wednesday at 8PM
-	cron.schedule("0 20 * * 3", async () => {
-		console.log("Running Supreme cron job");
-		await mainSupremeNotifications();
-		console.log("Supreme drops are done");
-	});
+	// cron.schedule("0 20 * * 3", async () => {
+	// 	console.log("Running Supreme cron job");
+	// 	await mainSupremeNotifications();
+	// 	console.log("Supreme drops are done");
+	// });
 
-	//runs every Thursday at 8PM
-	cron.schedule("0 20 * * 4", async () => {
-		console.log("Running Palace cron job");
-		await mainPalaceNotifications();
-		console.log("Palace drops are done");
-	});
+	// //runs every Thursday at 8PM
+	// cron.schedule("0 20 * * 4", async () => {
+	// 	console.log("Running Palace cron job");
+	// 	await mainPalaceNotifications();
+	// 	console.log("Palace drops are done");
+	// });
 
 	//runs everyday at 8PM
 	// cron.schedule("0 20 * * *", () => {
