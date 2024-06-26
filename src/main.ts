@@ -4,6 +4,7 @@ import cron from "node-cron";
 import { Discord } from "./discord";
 import { Supreme } from "./supreme";
 import { Palace } from "./palace";
+import { SNKRS } from "./snkrs";
 import { Utility } from "./utility";
 import logger from "./config/logger";
 const constants = require("./constants");
@@ -119,16 +120,17 @@ async function mainPalaceNotifications() {
 	}
 }
 
-// async function mainSnkrsNotifications() {
-// 	var tomorrowsDate = Utility.getTomorrowsDate();
-// 	var snkrsDrops = [];
+async function mainSnkrsNotifications() {
+	const snkrs = new SNKRS();
+	var tomorrowsDate = Utility.getTomorrowsDate();
+	var snkrsDrops = [];
 
-// 	try {
-// 		snkrsDrops = await snkrs.parseSnkrsDropInfo(tomorrowsDate);
-// 	} catch (error) {
-// 		console.error(error);
-// 	}
-// }
+	try {
+		snkrsDrops = await snkrs.parseSnkrsDropInfo(tomorrowsDate);
+	} catch (error) {
+		console.error(error);
+	}
+}
 
 /**
  * When the script has connected to Discord successfully
@@ -137,23 +139,23 @@ client.on("ready", async () => {
 	logger.info("Bot is ready");
 
 	//runs every Wednesday at 8PM
-	cron.schedule("0 20 * * 3", async () => {
-		logger.info("Running Supreme cron job");
-		await mainSupremeNotifications();
-		logger.info("Supreme drops are done");
-	});
+	// cron.schedule("0 20 * * 3", async () => {
+	// 	logger.info("Running Supreme cron job");
+	// 	await mainSupremeNotifications();
+	// 	logger.info("Supreme drops are done");
+	// });
 
 	//runs every Thursday at 8PM
-	cron.schedule("0 20 * * 4", async () => {
-		logger.info("Running Palace cron job");
-		await mainPalaceNotifications();
-		logger.info("Palace drops are done");
-	});
+	// cron.schedule("0 20 * * 4", async () => {
+	// 	logger.info("Running Palace cron job");
+	// 	await mainPalaceNotifications();
+	// 	logger.info("Palace drops are done");
+	// });
 
 	//runs everyday at 8PM
-	// cron.schedule("0 20 * * *", () => {
-	// logger.info("Running SNKRS cron job");
-	// await mainSnkrsNotifications();
-	// logger.info("SNKRS drops are done");
-	// });
+	//cron.schedule("0 20 * * *", () => {
+	logger.info("Running SNKRS cron job");
+	await mainSnkrsNotifications();
+	logger.info("SNKRS drops are done");
+	//});
 });

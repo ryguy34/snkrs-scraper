@@ -1,5 +1,6 @@
 module.exports = Object.freeze({
 	SNKRS: {
+		BASE_URL: "https://www.nike.com",
 		URL: "https://nike.com/launch?s=upcoming",
 		CATEGORY_ID: "915088080699023401",
 		HEADERS: {
