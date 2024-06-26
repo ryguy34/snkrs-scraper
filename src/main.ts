@@ -68,7 +68,7 @@ async function mainSupremeNotifications() {
 			}
 		}
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 	}
 }
 
@@ -115,7 +115,7 @@ async function mainPalaceNotifications() {
 			}
 		}
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 	}
 }
 
@@ -144,11 +144,11 @@ client.on("ready", async () => {
 	});
 
 	//runs every Thursday at 8PM
-	cron.schedule("0 20 * * 4", async () => {
-		logger.info("Running Palace cron job");
-		await mainPalaceNotifications();
-		logger.info("Palace drops are done");
-	});
+	//cron.schedule("0 20 * * 4", async () => {
+	logger.info("Running Palace cron job");
+	await mainPalaceNotifications();
+	logger.info("Palace drops are done");
+	//});
 
 	//runs everyday at 8PM
 	// cron.schedule("0 20 * * *", () => {

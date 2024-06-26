@@ -9,7 +9,15 @@ const logger = winston.createLogger({
 		winston.format.json() // JSON format
 	),
 	transports: [
-		new winston.transports.Console(), // Console transport
+		new winston.transports.Console({
+			format: winston.format.combine(
+				winston.format.colorize(),
+				winston.format.align(),
+				winston.format.printf(
+					(info) => `${info.timestamp} [${info.level}]: ${info.message}`
+				)
+			),
+		}), // Console transport
 	],
 });
 
