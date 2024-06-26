@@ -3,13 +3,13 @@ import { load } from "cheerio";
 
 const constants = require("./constants");
 const PalaceDropInfo = require("./vo/palaceDropInfo");
-const PalaceTextChannelInfo = require("./vo/palaceTextChannelInfo");
+const TextChannelInfo = require("./vo/textChannelInfo");
 
 export class Palace {
 	constructor() {}
 
 	async parsePalaceDrop(currentWeekFridayDate: string) {
-		var palaceDiscordTextChannelInfo = new PalaceTextChannelInfo();
+		var palaceDiscordTextChannelInfo = new TextChannelInfo();
 		var productList: (typeof PalaceDropInfo)[] = [];
 
 		try {
@@ -52,8 +52,9 @@ export class Palace {
 				var png = $(ele).find("img").attr("data-src");
 
 				var parts = itemSlug?.split("-");
+				var season = "";
 				if (parts) {
-					var season = `${parts[0]}-${parts[1]}`;
+					season = `${parts[0]}-${parts[1]}`;
 				}
 
 				palaceDropInfo.imageUrl = constants.PALACE_COMMUNITY_BASE_URL + png;

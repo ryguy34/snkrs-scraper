@@ -1,6 +1,13 @@
-import { Channel, Client, ChannelType, EmbedBuilder } from "discord.js";
+import {
+	Client,
+	ChannelType,
+	EmbedBuilder,
+	TextChannel,
+	GuildBasedChannel,
+} from "discord.js";
 import "dotenv/config";
-import "fs";
+import * as fs from "fs";
+import { TextChannelInfo } from "./vo/textChannelInfo";
 
 export class Discord {
 	constructor() {}
@@ -13,7 +20,11 @@ export class Discord {
 	 * @param {*} siteName
 	 * @returns
 	 */
-	async sendDropInfo(textChannelInfo, channel: Channel, siteName: string) {
+	async sendDropInfo(
+		textChannelInfo: TextChannelInfo,
+		channel: TextChannel,
+		siteName: string
+	) {
 		let channelMessage = "";
 		if (siteName === "Supreme") {
 			channelMessage = textChannelInfo.openingMessage.replace(
@@ -66,10 +77,10 @@ export class Discord {
 	 */
 	async createTextChannel(
 		client: Client,
-		category: string,
+		category: GuildBasedChannel,
 		channelName: string
 	) {
-		const guild = client.guilds.cache.get(process.env.SERVER_ID);
+		const guild = client.guilds.cache.get(process.env.SERVER_ID!);
 
 		if (!guild) {
 			return console.log(`Guild not found.`);
@@ -105,9 +116,9 @@ export class Discord {
 		console.log(`Searching for channel: ${channelName}`);
 
 		return new Promise((resolve) => {
-			const guild = client.guilds.cache.get(process.env.SERVER_ID);
+			const guild = client.guilds.cache.get(process.env.SERVER_ID!);
 
-			const channelExists = guild.channels.cache.some((channel) => {
+			const channelExists = guild?.channels.cache.some((channel) => {
 				return (
 					channel.name === channelName && channel.parentId === categoryId
 				);
@@ -138,9 +149,9 @@ export class Discord {
 		client: Client,
 		partialCategoryName: string
 	) {
-		const guild = client.guilds.cache.get(process.env.SERVER_ID);
+		const guild = client.guilds.cache.get(process.env.SERVER_ID!);
 
-		const category = guild.channels.cache.find(
+		const category = guild?.channels.cache.find(
 			(channel) =>
 				channel.type === 4 && channel.name.includes(partialCategoryName)
 		);

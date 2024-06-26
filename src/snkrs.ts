@@ -5,6 +5,8 @@ const SnkrsDropInfo = require("./vo/snkrsDropInfo");
 const constants = require("./constants");
 
 export class SNKRS {
+	snkrsDropInfo: any;
+
 	constructor() {
 		this.snkrsDropInfo = new SnkrsDropInfo();
 	}

@@ -12,7 +12,7 @@ export class Utility {
 	static getCurrentSeason() {
 		const todaysDate = new Date();
 		const currentYear = todaysDate.getFullYear();
-		if (todaysDate >= new Date().setFullYear(currentYear, 7, 1)) {
+		if (todaysDate >= new Date(`${currentYear}-07-01`)) {
 			return "fall-winter";
 		} else {
 			return "spring-summer";

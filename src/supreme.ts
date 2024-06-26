@@ -4,7 +4,7 @@ import { load } from "cheerio";
 
 const constants = require("./constants");
 const SupremeDropInfo = require("./vo/SupremeDropInfo");
-const SupremeTextChannelInfo = require("./vo/SupremeTextChannelInfo");
+const TextChannelInfo = require("./vo/textChannelInfo");
 
 export class Supreme {
 	constructor() {}
@@ -14,7 +14,7 @@ export class Supreme {
 		currentYear: number,
 		currentSeason: string
 	) {
-		var supremeTextChannelInfo = new SupremeTextChannelInfo();
+		var supremeTextChannelInfo = new TextChannelInfo();
 		var productList: (typeof SupremeDropInfo)[] = [];
 
 		try {

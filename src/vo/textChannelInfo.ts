@@ -1,7 +1,7 @@
-export class PalaceTextChannelInfo {
+export class TextChannelInfo {
 	channelName: string;
 	openingMessage: string;
-	products: [];
+	products: any[];
 
 	constructor(channelName: string, openingMessage: string) {
 		this.channelName = channelName;

@@ -66,7 +66,7 @@ async function mainSupremeNotifications() {
 
 					await discord.sendDropInfo(
 						supremeDiscordTextChannelInfo,
-						newChannel,
+						newChannel!,
 						"Supreme"
 					);
 				}
@@ -125,16 +125,16 @@ async function mainPalaceNotifications() {
 	}
 }
 
-async function mainSnkrsNotifications() {
-	var tomorrowsDate = Utility.getTomorrowsDate();
-	var snkrsDrops = [];
+// async function mainSnkrsNotifications() {
+// 	var tomorrowsDate = Utility.getTomorrowsDate();
+// 	var snkrsDrops = [];
 
-	try {
-		snkrsDrops = await snkrs.parseSnkrsDropInfo(tomorrowsDate);
-	} catch (error) {
-		console.error(error);
-	}
-}
+// 	try {
+// 		snkrsDrops = await snkrs.parseSnkrsDropInfo(tomorrowsDate);
+// 	} catch (error) {
+// 		console.error(error);
+// 	}
+// }
 
 client.on("ready", async () => {
 	console.log("Bot is ready");
