@@ -2,11 +2,11 @@ import "dotenv/config";
 import { Client, GatewayIntentBits } from "discord.js";
 import "node-cron";
 
-const Discord = require("./discord");
-const SNKRS = require("./snkrs");
-const Supreme = require("./supreme");
-const Palace = require("./palace");
-const Utility = require("./utility");
+import { Discord } from "./discord";
+import { SNKRS } from "./snkrs";
+import { Supreme } from "./supreme";
+import { Palace } from "./palace";
+import { Utility } from "./utility";
 const constants = require("./constants");
 
 const snkrs = new SNKRS();

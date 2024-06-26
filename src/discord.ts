@@ -1,11 +1,8 @@
-import { Channel, Client } from "discord.js";
+import { Channel, Client, ChannelType, EmbedBuilder } from "discord.js";
+import "dotenv/config";
+import "fs";
 
-require("dotenv").config();
-
-const fs = require("fs");
-const { ChannelType, EmbedBuilder } = require("discord.js");
-
-class Discord {
+export class Discord {
 	constructor() {}
 
 	/**
@@ -158,5 +155,3 @@ class Discord {
 		return category;
 	}
 }
-
-module.exports = Discord;

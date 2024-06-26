@@ -1,4 +1,4 @@
-class Utility {
+export class Utility {
 	constructor() {}
 
 	static getDate() {
@@ -7,6 +7,16 @@ class Utility {
 
 	static getFullYear() {
 		return new Date().getFullYear();
+	}
+
+	static getCurrentSeason() {
+		const todaysDate = new Date();
+		const currentYear = todaysDate.getFullYear();
+		if (todaysDate >= new Date().setFullYear(currentYear, 7, 1)) {
+			return "fall-winter";
+		} else {
+			return "spring-summer";
+		}
 	}
 
 	static getThursdayOfCurrentWeek(): string {
@@ -41,5 +51,3 @@ class Utility {
 		return `${year}-${month}-${day}`;
 	}
 }
-
-module.exports = Utility;

@@ -1,21 +1,23 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
-const snkrsDropInfo = require("./vo/snkrsDropInfo");
+import axios from "axios";
+import { load } from "cheerio";
+
+const SnkrsDropInfo = require("./vo/snkrsDropInfo");
 const constants = require("./constants");
 
-class SNKRS {
+export class SNKRS {
 	constructor() {
-		this.snkrsDropInfo = new snkrsDropInfo();
+		this.snkrsDropInfo = new SnkrsDropInfo();
 	}
 
 	async getSnkrsDropInfo() {
 		try {
-			const response = await axios.get(constants.SNKRS_URL, constants.params);
-			const $ = cheerio.load(response.data);
+			const response = await axios.get(
+				constants.SNKRS_URL,
+				constants.params
+			);
+			const $ = load(response.data);
 		} catch (error) {
 			console.log("Some error: " + error);
 		}
 	}
 }
-
-module.exports = SNKRS;

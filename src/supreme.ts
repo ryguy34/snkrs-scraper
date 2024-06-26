@@ -1,17 +1,21 @@
-require("dotenv").config();
+import "dotenv/config";
+import axios from "axios";
+import { load } from "cheerio";
 
-const axios = require("axios");
-const cheerio = require("cheerio");
 const constants = require("./constants");
 const SupremeDropInfo = require("./vo/SupremeDropInfo");
 const SupremeTextChannelInfo = require("./vo/SupremeTextChannelInfo");
 
-class Supreme {
+export class Supreme {
 	constructor() {}
 
-	async parseSupremeDrop(currentWeekThursdayDate, currentYear, currentSeason) {
+	async parseSupremeDrop(
+		currentWeekThursdayDate: string,
+		currentYear: number,
+		currentSeason: string
+	) {
 		var supremeTextChannelInfo = new SupremeTextChannelInfo();
-		var productList = [];
+		var productList: (typeof SupremeDropInfo)[] = [];
 
 		try {
 			const res = await axios.get(
@@ -25,7 +29,7 @@ class Supreme {
 			);
 
 			const htmlData = res.data;
-			const $ = cheerio.load(htmlData);
+			const $ = load(htmlData);
 			var title = $("title").text();
 			var channelName = title
 				.substring(title.indexOf("-") + 1, title.lastIndexOf("-"))
@@ -36,7 +40,7 @@ class Supreme {
 			supremeTextChannelInfo.openingMessage = title;
 			supremeTextChannelInfo.channelName = channelName;
 
-			$(".catalog-item").each((_, ele) => {
+			$(".catalog-item").each((_: number, ele: any) => {
 				var productInfo = new SupremeDropInfo();
 				var itemId = $(ele).find("a").attr("data-itemid");
 				var itemSlug = $(ele).find("a").attr("data-itemslug");
@@ -68,19 +72,17 @@ class Supreme {
 
 			supremeTextChannelInfo.products = productList;
 		} catch (error) {
-			if (error.response && error.response.status === 404) {
-				console.log(
-					"The requested resource was not found for " +
-						error.response.config.url
-				);
+			// if (error.response && error.response.status === 404) {
+			// 	console.log(
+			// 		"The requested resource was not found for " +
+			// 			error.response.config.url
+			// 	);
 
-				return null;
-			}
+			// 	return null;
+			// }
 			console.error(error);
 		}
 
 		return supremeTextChannelInfo;
 	}
 }
-
-module.exports = Supreme;

@@ -1,16 +1,16 @@
-import "axios";
-import "cheerio";
+import axios from "axios";
+import { load } from "cheerio";
 
 const constants = require("./constants");
 const PalaceDropInfo = require("./vo/palaceDropInfo");
 const PalaceTextChannelInfo = require("./vo/palaceTextChannelInfo");
 
-class Palace {
+export class Palace {
 	constructor() {}
 
 	async parsePalaceDrop(currentWeekFridayDate: string) {
 		var palaceDiscordTextChannelInfo = new PalaceTextChannelInfo();
-		var productList = [];
+		var productList: (typeof PalaceDropInfo)[] = [];
 
 		try {
 			const res = await axios.get(
@@ -21,7 +21,7 @@ class Palace {
 			);
 
 			const htmlData = res.data;
-			const $ = cheerio.load(htmlData);
+			const $ = load(htmlData);
 
 			var title = $(".title-font h1").text();
 			const parsedChannelName = title
@@ -51,15 +51,17 @@ class Palace {
 					.trim();
 				var png = $(ele).find("img").attr("data-src");
 
-				var parts = itemSlug.split("-");
-				var season = `${parts[0]}-${parts[1]}`;
+				var parts = itemSlug?.split("-");
+				if (parts) {
+					var season = `${parts[0]}-${parts[1]}`;
+				}
 
 				palaceDropInfo.imageUrl = constants.PALACE_COMMUNITY_BASE_URL + png;
 				palaceDropInfo.productInfoUrl = `${constants.PALACE_COMMUNITY_BASE_URL}/collections/${season}/items/${itemId}/${itemSlug}`;
 				palaceDropInfo.productName = itemName;
 				palaceDropInfo.categoryUrl = `${
 					constants.PALACE_BASE_URL
-				}/collections/${category.toLowerCase()}`;
+				}/collections/${category?.toLowerCase()}`;
 				palaceDropInfo.price = price === "" ? "???" : price;
 
 				productList.push(palaceDropInfo);
@@ -73,5 +75,3 @@ class Palace {
 		return palaceDiscordTextChannelInfo;
 	}
 }
-
-module.exports = Palace;
