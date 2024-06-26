@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Client, GatewayIntentBits } from "discord.js";
-import "node-cron";
+import * as cron from "node-cron";
 
 import { Discord } from "./discord";
 import { SNKRS } from "./snkrs";
@@ -9,6 +9,7 @@ import { Palace } from "./palace";
 import { Utility } from "./utility";
 const constants = require("./constants");
 
+// TODO: add these to the helper methods instead if init only once
 const snkrs = new SNKRS();
 const supreme = new Supreme();
 const discord = new Discord();
@@ -114,7 +115,7 @@ async function mainPalaceNotifications() {
 
 					await discord.sendDropInfo(
 						palaceDiscordTextChannelInfo,
-						newChannel,
+						newChannel!,
 						"Palace"
 					);
 				}
@@ -140,11 +141,11 @@ client.on("ready", async () => {
 	console.log("Bot is ready");
 
 	//runs every Wednesday at 8PM
-	// cron.schedule("0 20 * * 3", async () => {
-	// 	console.log("Running Supreme cron job");
-	// 	await mainSupremeNotifications();
-	// 	console.log("Supreme drops are done");
-	// });
+	cron.schedule("0 20 * * 3", async () => {
+		console.log("Running Supreme cron job");
+		await mainSupremeNotifications();
+		console.log("Supreme drops are done");
+	});
 
 	// //runs every Thursday at 8PM
 	// cron.schedule("0 20 * * 4", async () => {
