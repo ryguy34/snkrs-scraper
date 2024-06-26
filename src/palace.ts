@@ -9,7 +9,6 @@ export class Palace {
 	constructor() {}
 
 	async parsePalaceDrop(currentWeekFridayDate: string) {
-		var palaceDiscordTextChannelInfo = new TextChannelInfo();
 		var productList: (typeof PalaceDropInfo)[] = [];
 
 		try {
@@ -33,8 +32,10 @@ export class Palace {
 			var month = parsedChannelName[0].substring(0, 3);
 			const channelName = `${month}-${parsedChannelName[1]}`;
 
-			palaceDiscordTextChannelInfo.channelName = channelName;
-			palaceDiscordTextChannelInfo.openingMessage = title;
+			var palaceDiscordTextChannelInfo = new TextChannelInfo(
+				channelName,
+				title
+			);
 
 			$(".catalog-item").each((_: number, ele: any) => {
 				var palaceDropInfo = new PalaceDropInfo();
