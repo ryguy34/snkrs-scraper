@@ -1,15 +1,15 @@
 export class Utility {
 	constructor() {}
 
-	static getDate() {
+	static getDate(): string {
 		return new Date().toISOString().slice(0, 10);
 	}
 
-	static getFullYear() {
+	static getFullYear(): number {
 		return new Date().getFullYear();
 	}
 
-	static getCurrentSeason() {
+	static getCurrentSeason(): string {
 		const todaysDate = new Date();
 		const currentYear = todaysDate.getFullYear();
 		if (todaysDate >= new Date(`${currentYear}-07-01`)) {
@@ -35,7 +35,7 @@ export class Utility {
 		return `${year}-${month}-${day}`;
 	}
 
-	static getFridayOfCurrentWeek() {
+	static getFridayOfCurrentWeek(): string {
 		const today = new Date();
 		const currentDayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
 		const daysUntilFriday = (5 - currentDayOfWeek + 7) % 7; // Calculate how many days to Friday
