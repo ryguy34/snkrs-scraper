@@ -14,7 +14,6 @@ export class Supreme {
 		currentYear: number,
 		currentSeason: string
 	) {
-		var supremeTextChannelInfo = new TextChannelInfo();
 		var productList: (typeof SupremeDropInfo)[] = [];
 
 		try {
@@ -37,8 +36,7 @@ export class Supreme {
 				.toLocaleLowerCase()
 				.replace(" ", "-");
 
-			supremeTextChannelInfo.openingMessage = title;
-			supremeTextChannelInfo.channelName = channelName;
+			var supremeTextChannelInfo = new TextChannelInfo(channelName, title);
 
 			$(".catalog-item").each((_: number, ele: any) => {
 				var productInfo = new SupremeDropInfo();
@@ -72,14 +70,6 @@ export class Supreme {
 
 			supremeTextChannelInfo.products = productList;
 		} catch (error) {
-			// if (error.response && error.response.status === 404) {
-			// 	console.log(
-			// 		"The requested resource was not found for " +
-			// 			error.response.config.url
-			// 	);
-
-			// 	return null;
-			// }
 			console.error(error);
 		}
 

@@ -8,7 +8,7 @@ export class SNKRS {
 	snkrsDropInfo: any;
 
 	constructor() {
-		this.snkrsDropInfo = new SnkrsDropInfo();
+		//this.snkrsDropInfo = new SnkrsDropInfo();
 	}
 
 	async getSnkrsDropInfo() {

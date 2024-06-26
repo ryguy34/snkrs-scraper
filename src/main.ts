@@ -141,11 +141,11 @@ client.on("ready", async () => {
 	console.log("Bot is ready");
 
 	//runs every Wednesday at 8PM
-	cron.schedule("0 20 * * 3", async () => {
-		console.log("Running Supreme cron job");
-		await mainSupremeNotifications();
-		console.log("Supreme drops are done");
-	});
+	//cron.schedule("0 20 * * 3", async () => {
+	console.log("Running Supreme cron job");
+	await mainSupremeNotifications();
+	console.log("Supreme drops are done");
+	//});
 
 	// //runs every Thursday at 8PM
 	// cron.schedule("0 20 * * 4", async () => {
