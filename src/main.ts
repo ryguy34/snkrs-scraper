@@ -3,17 +3,12 @@ import { Client, GatewayIntentBits } from "discord.js";
 import * as cron from "node-cron";
 
 import { Discord } from "./discord";
-import { SNKRS } from "./snkrs";
 import { Supreme } from "./supreme";
 import { Palace } from "./palace";
 import { Utility } from "./utility";
 const constants = require("./constants");
 
-// TODO: add these to the helper methods instead if init only once
-const snkrs = new SNKRS();
-const supreme = new Supreme();
 const discord = new Discord();
-const palace = new Palace();
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -29,6 +24,7 @@ client.login(process.env.CLIENT_TOKEN);
  * main function for supreme notifications to Discord channel
  */
 async function mainSupremeNotifications() {
+	const supreme = new Supreme();
 	try {
 		const currentWeekThursdayDate = Utility.getThursdayOfCurrentWeek(); // returns format: YYYY-MM-DD
 		const currentYear = Utility.getFullYear(); // YYYY
@@ -39,8 +35,6 @@ async function mainSupremeNotifications() {
 			currentYear,
 			currentSeason
 		);
-
-		//console.log(supremeDiscordTextChannelInfo);
 
 		if (supremeDiscordTextChannelInfo) {
 			const value = await discord.doesChannelExistUnderCategory(
@@ -82,14 +76,13 @@ async function mainSupremeNotifications() {
  * main function for palace notifications to Discord channel
  */
 async function mainPalaceNotifications() {
+	const palace = new Palace();
 	const currentWeekFridayDate = Utility.getFridayOfCurrentWeek(); // returns format: YYYY-MM-DD
 
 	try {
 		const palaceDiscordTextChannelInfo = await palace.parsePalaceDrop(
 			currentWeekFridayDate
 		);
-
-		console.log(palaceDiscordTextChannelInfo);
 
 		if (palaceDiscordTextChannelInfo) {
 			const value = await discord.doesChannelExistUnderCategory(
@@ -137,6 +130,9 @@ async function mainPalaceNotifications() {
 // 	}
 // }
 
+/**
+ * When the script has connected to Discord successfully
+ */
 client.on("ready", async () => {
 	console.log("Bot is ready");
 
@@ -147,12 +143,12 @@ client.on("ready", async () => {
 		console.log("Supreme drops are done");
 	});
 
-	// //runs every Thursday at 8PM
-	//cron.schedule("0 20 * * 4", async () => {
-	console.log("Running Palace cron job");
-	await mainPalaceNotifications();
-	console.log("Palace drops are done");
-	//});
+	//runs every Thursday at 8PM
+	cron.schedule("0 20 * * 4", async () => {
+		console.log("Running Palace cron job");
+		await mainPalaceNotifications();
+		console.log("Palace drops are done");
+	});
 
 	//runs everyday at 8PM
 	// cron.schedule("0 20 * * *", () => {

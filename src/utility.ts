@@ -1,14 +1,26 @@
 export class Utility {
 	constructor() {}
 
+	/**
+	 *
+	 * @returns string
+	 */
 	static getDate(): string {
 		return new Date().toISOString().slice(0, 10);
 	}
 
+	/**
+	 * Returns in format YYYY
+	 * @returns number
+	 */
 	static getFullYear(): number {
 		return new Date().getFullYear();
 	}
 
+	/**
+	 * Gets current season fall-winter or spring-summer
+	 * @returns string
+	 */
 	static getCurrentSeason(): string {
 		const todaysDate = new Date();
 		const currentYear = todaysDate.getFullYear();
@@ -19,6 +31,10 @@ export class Utility {
 		}
 	}
 
+	/**
+	 * Gets the upcoming Thursday date for the current week in YYYY-MM-DD
+	 * @returns string
+	 */
 	static getThursdayOfCurrentWeek(): string {
 		const today = new Date();
 		const currentDayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
@@ -35,6 +51,10 @@ export class Utility {
 		return `${year}-${month}-${day}`;
 	}
 
+	/**
+	 * Gets the upcoming Friday date for the current week in YYYY-MM-DD
+	 * @returns string
+	 */
 	static getFridayOfCurrentWeek(): string {
 		const today = new Date();
 		const currentDayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
