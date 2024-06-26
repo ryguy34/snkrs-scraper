@@ -1,10 +1,9 @@
-import "dotenv/config";
 import axios from "axios";
 import { load } from "cheerio";
+import { SupremeDropInfo } from "./vo/supremeDropInfo";
+import { TextChannelInfo } from "./vo/textChannelInfo";
 
 const constants = require("./constants");
-const SupremeDropInfo = require("./vo/SupremeDropInfo");
-const TextChannelInfo = require("./vo/textChannelInfo");
 
 export class Supreme {
 	constructor() {}
@@ -14,7 +13,8 @@ export class Supreme {
 		currentYear: number,
 		currentSeason: string
 	) {
-		var productList: (typeof SupremeDropInfo)[] = [];
+		var productList: SupremeDropInfo[] = [];
+		var supremeTextChannelInfo;
 
 		try {
 			const res = await axios.get(
@@ -36,10 +36,9 @@ export class Supreme {
 				.toLocaleLowerCase()
 				.replace(" ", "-");
 
-			var supremeTextChannelInfo = new TextChannelInfo(channelName, title);
+			supremeTextChannelInfo = new TextChannelInfo(channelName, title);
 
 			$(".catalog-item").each((_: number, ele: any) => {
-				var productInfo = new SupremeDropInfo();
 				var itemId = $(ele).find("a").attr("data-itemid");
 				var itemSlug = $(ele).find("a").attr("data-itemslug");
 				var itemName = $(ele).find("a").attr("data-itemname");
@@ -52,18 +51,26 @@ export class Supreme {
 					.text()
 					.replace(/(\r\n|\n|\r)/gm, "");
 
-				productInfo.imageUrl =
+				const imageUrl =
 					constants.SUPREME_COMMUNITY_BASE_URL + "/resize/576" + png;
-				productInfo.productName = itemName === "" ? "?" : itemName;
-				productInfo.price = price === "" ? "Free or Unknown" : price;
-				productInfo.categoryUrl =
+				const productName = itemName === "" ? "?" : itemName;
+				var formatPrice = price === "" ? "Free or Unknown" : price;
+				const categoryUrl =
 					constants.SUPREME_BASE_URL + "collections/" + category;
-				productInfo.productInfoUrl =
+				const productInfoUrl =
 					constants.SUPREME_COMMUNITY_BASE_URL +
 					"/season/itemdetails/" +
 					itemId +
 					"/" +
 					itemSlug;
+
+				const productInfo = new SupremeDropInfo(
+					productName!,
+					productInfoUrl,
+					imageUrl,
+					formatPrice,
+					categoryUrl
+				);
 
 				productList.push(productInfo);
 			});

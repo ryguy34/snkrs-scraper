@@ -1,15 +1,16 @@
 import axios from "axios";
 import { load } from "cheerio";
+import { PalaceDropInfo } from "./vo/palaceDropInfo";
+import { TextChannelInfo } from "./vo/textChannelInfo";
 
 const constants = require("./constants");
-const PalaceDropInfo = require("./vo/palaceDropInfo");
-const TextChannelInfo = require("./vo/textChannelInfo");
 
 export class Palace {
 	constructor() {}
 
 	async parsePalaceDrop(currentWeekFridayDate: string) {
-		var productList: (typeof PalaceDropInfo)[] = [];
+		var productList: PalaceDropInfo[] = [];
+		var palaceDiscordTextChannelInfo;
 
 		try {
 			const res = await axios.get(
@@ -32,13 +33,7 @@ export class Palace {
 			var month = parsedChannelName[0].substring(0, 3);
 			const channelName = `${month}-${parsedChannelName[1]}`;
 
-			var palaceDiscordTextChannelInfo = new TextChannelInfo(
-				channelName,
-				title
-			);
-
 			$(".catalog-item").each((_: number, ele: any) => {
-				var palaceDropInfo = new PalaceDropInfo();
 				var itemId = $(ele).find("a").attr("data-itemid");
 				var itemSlug = $(ele).find("a").attr("data-itemslug");
 				var itemName = $(ele).find("a").attr("data-itemname");
@@ -58,17 +53,24 @@ export class Palace {
 					season = `${parts[0]}-${parts[1]}`;
 				}
 
-				palaceDropInfo.imageUrl = constants.PALACE_COMMUNITY_BASE_URL + png;
-				palaceDropInfo.productInfoUrl = `${constants.PALACE_COMMUNITY_BASE_URL}/collections/${season}/items/${itemId}/${itemSlug}`;
-				palaceDropInfo.productName = itemName;
-				palaceDropInfo.categoryUrl = `${
+				const imageUrl = constants.PALACE_COMMUNITY_BASE_URL + png;
+				const productInfoUrl = `${constants.PALACE_COMMUNITY_BASE_URL}/collections/${season}/items/${itemId}/${itemSlug}`;
+				const productName = itemName;
+				const categoryUrl = `${
 					constants.PALACE_BASE_URL
 				}/collections/${category?.toLowerCase()}`;
-				palaceDropInfo.price = price === "" ? "???" : price;
-
+				var price = price === "" ? "???" : price;
+				var palaceDropInfo = new PalaceDropInfo(
+					productName!,
+					productInfoUrl,
+					imageUrl,
+					price,
+					categoryUrl
+				);
 				productList.push(palaceDropInfo);
 			});
 
+			palaceDiscordTextChannelInfo = new TextChannelInfo(channelName, title);
 			palaceDiscordTextChannelInfo.products = productList;
 		} catch (error) {
 			console.log(error);
