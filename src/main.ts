@@ -26,8 +26,8 @@ client.login(process.env.CLIENT_TOKEN);
 async function mainSupremeNotifications() {
 	const supreme = new Supreme();
 	try {
-		const currentWeekThursdayDate = Utility.getThursdayOfCurrentWeek(); // returns format: YYYY-MM-DD
-		const currentYear = Utility.getFullYear(); // YYYY
+		const currentWeekThursdayDate = Utility.getThursdayOfCurrentWeek();
+		const currentYear = Utility.getFullYear();
 		const currentSeason = Utility.getCurrentSeason();
 
 		const supremeDiscordTextChannelInfo = await supreme.parseSupremeDrop(

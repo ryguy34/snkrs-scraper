@@ -60,7 +60,7 @@ export class Utility {
 		const currentDayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
 		const daysUntilFriday = (5 - currentDayOfWeek + 7) % 7; // Calculate how many days to Friday
 
-		// Set the date to Thursday of the current week
+		// Set the date to Friday of the current week
 		today.setDate(today.getDate() + daysUntilFriday);
 
 		// Format the date as YYYY-MM-DD
