@@ -34,16 +34,11 @@ export class SNKRS {
 
 			$(".product-card").each((_: number, ele: any) => {
 				var link = $(ele).find("a").attr("href");
-				// TODO: need to make this logic better just incase there is a release after a event card
-				// look into the button under the card that has "learn more"
-				if (link!.startsWith("/launch")) {
-					// https://www.nike.com/launch/t/acg-rufus-sequoia
-					const productLink = `${constants.SNKRS.BASE_URL}${link}`.split(
-						"?"
-					)[0];
-
-					productLinks.push(productLink);
-				}
+				// https://www.nike.com/launch/t/acg-rufus-sequoia
+				const productLink = `${constants.SNKRS.BASE_URL}${link}`.split(
+					"?"
+				)[0];
+				productLinks.push(productLink);
 			});
 		} catch (error) {
 			logger.error("Error gathering SNKRS release links: " + error);
@@ -72,6 +67,7 @@ export class SNKRS {
 					.split("\n");
 				const description = descriptionAndSku[0];
 				const sku = descriptionAndSku[1].trim().replace("SKU: ", "");
+				var imageLinks = [];
 				//TODO: get image links
 
 				logger.info("link: " + link);
