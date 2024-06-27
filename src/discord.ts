@@ -62,8 +62,6 @@ export class Discord {
 					iconURL: "attachment://logo.png",
 				});
 
-			embed.addFields();
-
 			const image = fs.readFileSync("./resources/logo.png");
 
 			await channel.send({
