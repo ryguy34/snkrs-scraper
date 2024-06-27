@@ -55,38 +55,27 @@ export class SNKRS {
 				const res = await axios(options);
 				const $ = load(res.data);
 				const model = $(".product-info").find("h1").first().text();
-				const regex = /[!@#$%^&*(),.?":{}|<>]/;
+				const name = $(".product-info").find("h2").first().text();
+				const price = $(".product-info").find("div").first().text();
+				const availableAt = $(".product-info .test-available-date")
+					.find("div")
+					.text()
+					.replace("2:00 PM", "9:00 AM");
+				const descriptionAndSku = $(".product-info .description-text")
+					.find("p")
+					.first()
+					.text()
+					.split("\n");
+				const description = descriptionAndSku[0];
+				const sku = descriptionAndSku[1].trim().replace("SKU: ", "");
+				//TODO: get image links
 
-				// TODO: need to see if we can make this logic more robust
-				if (
-					!model.includes("Just Dropped") &&
-					!model.includes("SNKRS") &&
-					!model.includes("Details") &&
-					!model.includes("Jordan Brand Styles") &&
-					!regex.test(model)
-				) {
-					const name = $(".product-info").find("h2").first().text();
-					const price = $(".product-info").find("div").first().text();
-					const availableAt = $(".product-info .test-available-date")
-						.find("div")
-						.text()
-						.replace("2:00 PM", "9:00 AM");
-					const descriptionAndSku = $(".product-info .description-text")
-						.find("p")
-						.first()
-						.text()
-						.split("\n");
-					const description = descriptionAndSku[0];
-					const sku = descriptionAndSku[1].trim().replace("SKU: ", "");
-					//TODO: get image links
-
-					logger.info(link);
-					logger.info("model: " + model);
-					// logger.info(name);
-					// logger.info(price);
-					// logger.info(availableAt);
-					logger.info(sku + "\n");
-				}
+				logger.info(link);
+				logger.info("model: " + model);
+				// logger.info(name);
+				// logger.info(price);
+				// logger.info(availableAt);
+				logger.info(sku + "\n");
 			} catch (error) {
 				logger.error("Error parsing SNKRS release: " + error);
 			}
