@@ -9,7 +9,9 @@ const constants = require("./constants");
 export class Palace {
 	constructor() {}
 
-	async parsePalaceDrop(currentWeekFridayDate: string) {
+	async parsePalaceDrop(
+		currentWeekFridayDate: string
+	): Promise<ShopifyChannelInfo> {
 		var productList: ShopifyDropInfo[] = [];
 		var palaceDiscordTextChannelInfo;
 
@@ -80,6 +82,6 @@ export class Palace {
 			logger.error(error);
 		}
 
-		return palaceDiscordTextChannelInfo;
+		return palaceDiscordTextChannelInfo!;
 	}
 }

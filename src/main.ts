@@ -22,9 +22,9 @@ const client = new Client({
 client.login(process.env.CLIENT_TOKEN);
 
 /**
- * main function for supreme notifications to Discord channel
+ * main function for Supreme notifications to Discord channel
  */
-async function mainSupremeNotifications() {
+async function mainSupremeNotifications(): Promise<void> {
 	const supreme = new Supreme();
 	try {
 		const currentWeekThursdayDate = Utility.getThursdayOfCurrentWeek();
@@ -74,9 +74,9 @@ async function mainSupremeNotifications() {
 }
 
 /**
- * main function for palace notifications to Discord channel
+ * main function for Palace notifications to Discord channel
  */
-async function mainPalaceNotifications() {
+async function mainPalaceNotifications(): Promise<void> {
 	const palace = new Palace();
 	const currentWeekFridayDate = Utility.getFridayOfCurrentWeek(); // returns format: YYYY-MM-DD
 
@@ -120,15 +120,40 @@ async function mainPalaceNotifications() {
 	}
 }
 
-async function mainSnkrsNotifications() {
+/**
+ * main function for SNKRS notifications to Discord channel
+ */
+async function mainSnkrsNotifications(): Promise<void> {
 	const snkrs = new SNKRS();
 	var tomorrowsDate = Utility.getTomorrowsDate();
-	var snkrsDrops = [];
 
 	try {
-		snkrsDrops = await snkrs.parseSnkrsDropInfo(tomorrowsDate);
+		const snkrsDrops = await snkrs.parseSnkrsDropInfo(tomorrowsDate);
+
+		for (const snkrsDrop of snkrsDrops) {
+			const existingChannel = await discord.doesChannelExistUnderCategory(
+				client,
+				snkrsDrop.channelName,
+				constants.TEST.CATEGORY_ID
+			);
+
+			if (!existingChannel) {
+				const snkrsCategory = await discord.getFullCategoryNameBySubstring(
+					client,
+					//"releases"
+					"TEST"
+				);
+				const snkrsReleaseChannel = await discord.createTextChannel(
+					client,
+					snkrsCategory!,
+					snkrsDrop.channelName
+				);
+
+				await discord.sendSnkrsDropInfo(snkrsDrop, snkrsReleaseChannel!);
+			}
+		}
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 	}
 }
 
@@ -136,7 +161,7 @@ async function mainSnkrsNotifications() {
  * When the script has connected to Discord successfully
  */
 client.on("ready", async () => {
-	logger.info("Bot is ready");
+	logger.info("Bot is ready\n");
 
 	//runs every Wednesday at 8PM
 	// cron.schedule("0 20 * * 3", async () => {

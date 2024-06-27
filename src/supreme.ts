@@ -12,7 +12,7 @@ export class Supreme {
 		currentWeekThursdayDate: string,
 		currentYear: number,
 		currentSeason: string
-	) {
+	): Promise<ShopifyChannelInfo> {
 		var productList: ShopifyDropInfo[] = [];
 		var supremeTextChannelInfo;
 
@@ -80,6 +80,6 @@ export class Supreme {
 			console.error(error);
 		}
 
-		return supremeTextChannelInfo;
+		return supremeTextChannelInfo!;
 	}
 }

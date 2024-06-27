@@ -26,7 +26,7 @@ export class Discord {
 		textChannelInfo: ShopifyChannelInfo,
 		channel: TextChannel,
 		siteName: string
-	) {
+	): Promise<void> {
 		let channelMessage = "";
 		if (siteName === "Supreme") {
 			channelMessage = textChannelInfo.openingMessage.replace(
@@ -74,15 +74,14 @@ export class Discord {
 	/**
 	 * makes a list of embeds for the upcoming products
 	 *
-	 * @param {*} textChannelInfo
+	 * @param {*} snkrsChannelInfo
 	 * @param {*} channel
-	 * @param {*} siteName
 	 * @returns
 	 */
 	async sendSnkrsDropInfo(
 		snkrsChannelInfo: SnkrsDropInfo,
 		channel: TextChannel
-	) {
+	): Promise<void> {
 		channel.send("<@&834440275908755566>");
 		var embed;
 		embed = new EmbedBuilder()
@@ -93,8 +92,8 @@ export class Discord {
 			.setThumbnail("attachment://logo.png")
 			.addFields(
 				{ name: "Price", value: snkrsChannelInfo.price },
-				{ name: "Date", value: snkrsChannelInfo.releaseDate },
-				{ name: "Time", value: snkrsChannelInfo.releaseTime }
+				{ name: "Release Date", value: snkrsChannelInfo.releaseDate },
+				{ name: "Release Time", value: snkrsChannelInfo.releaseTime }
 			)
 			.setTimestamp()
 			.setFooter({
@@ -124,7 +123,7 @@ export class Discord {
 	 * creates a new channel given the category and channel name
 	 *
 	 * @param {*} client
-	 * @param {*} categoryName
+	 * @param {*} category
 	 * @param {*} channelName
 	 * @returns
 	 */
@@ -152,27 +151,28 @@ export class Discord {
 			`Channel "${newChannel.name}" created in category "${category.name}".`
 		);
 
-		return newChannel;
+		return newChannel!;
 	}
 
 	/**
 	 * returns a boolean of whether or not the channel exists under the given category
 	 *
 	 * @param {*} client
-	 * @param {*} name
+	 * @param {*} channelName
+	 * @param {*} categoryId
 	 * @returns
 	 */
 	async doesChannelExistUnderCategory(
 		client: Client,
 		channelName: string,
 		categoryId: string
-	) {
+	): Promise<GuildBasedChannel> {
 		logger.info(`Searching for channel: ${channelName}`);
 
 		return new Promise((resolve) => {
 			const guild = client.guilds.cache.get(process.env.SERVER_ID!);
 
-			const channelExists = guild?.channels.cache.some((channel) => {
+			const channelExists = guild?.channels.cache.find((channel) => {
 				return (
 					channel.name === channelName && channel.parentId === categoryId
 				);
@@ -188,7 +188,7 @@ export class Discord {
 				);
 			}
 
-			resolve(channelExists);
+			resolve(channelExists!);
 		});
 	}
 
@@ -224,7 +224,7 @@ export class Discord {
 		client: Client,
 		dateToday: Date,
 		categoryId: string
-	) {
+	): Promise<void> {
 		const guild = client.guilds.cache.get(process.env.SERVER_ID!);
 		const monthDayToday = dateToday.getMonth() * 100 + dateToday.getDate();
 

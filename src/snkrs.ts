@@ -9,8 +9,7 @@ const constants = require("./constants");
 export class SNKRS {
 	constructor() {}
 
-	async parseSnkrsDropInfo(tomorrowsDate: string) {
-		var itemsReleasing: any[] = [];
+	async parseSnkrsDropInfo(tomorrowsDate: string): Promise<SnkrsDropInfo[]> {
 		var productLinks: string[] = [];
 		const options = {
 			method: "get",
@@ -47,7 +46,7 @@ export class SNKRS {
 
 		const browser = await puppeteer.launch();
 		const page = await browser.newPage();
-
+		var snkrsDrops = [];
 		for (const link of productLinks) {
 			try {
 				options.url = link;
@@ -63,6 +62,7 @@ export class SNKRS {
 					.replace("2:00 PM", "9:00 AM")
 					.replace("Available ", "");
 				const dateTime = this.parseDateTime(availableAt);
+				// TODO: only send releases that are one week out
 				const releaseDate = dateTime[0];
 				const releaseTime = dateTime[1];
 				const descriptionAndSku = $(".product-info .description-text")
@@ -82,7 +82,7 @@ export class SNKRS {
 				imageLinks = imageLinks.filter((i) => {
 					return i.includes("t_prod");
 				});
-				const snrksDropInfo = new SnkrsDropInfo(
+				const snkrsDropInfo = new SnkrsDropInfo(
 					channelName,
 					`${model} ${name}`,
 					imageLinks,
@@ -95,22 +95,22 @@ export class SNKRS {
 					sku,
 					link
 				);
-
-				logger.info("link: " + link);
-				logger.info("model: " + model);
-				logger.info("name: " + name);
-				logger.info("price: " + price);
-				logger.info("releaseDate: " + releaseDate);
-				logger.info("releaseTime: " + releaseTime);
-				logger.info("description: " + description);
-				logger.info("channelName: " + channelName);
-				logger.info("sku: " + sku + "\n");
+				snkrsDrops.push(snkrsDropInfo);
+				// logger.info("link: " + link);
+				// logger.info("model: " + model);
+				// logger.info("name: " + name);
+				// logger.info("price: " + price);
+				// logger.info("releaseDate: " + releaseDate);
+				// logger.info("releaseTime: " + releaseTime);
+				// logger.info("description: " + description);
+				// logger.info("channelName: " + channelName);
+				// logger.info("sku: " + sku + "\n");
 			} catch (error) {
 				logger.error("Error parsing SNKRS release: " + error);
 			}
 		}
 
-		return itemsReleasing;
+		return snkrsDrops;
 	}
 
 	parseDateTime(availableAt: string): string[] {
