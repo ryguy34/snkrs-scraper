@@ -2,6 +2,7 @@ const axios = require("axios");
 import { load } from "cheerio";
 import zlib from "zlib";
 import logger from "./config/logger";
+import puppeteer from "puppeteer";
 const constants = require("./constants");
 
 export class SNKRS {
@@ -44,11 +45,15 @@ export class SNKRS {
 			logger.error("Error gathering SNKRS release links: " + error);
 		}
 
+		const browser = await puppeteer.launch();
+		const page = await browser.newPage();
+
 		for (const link of productLinks) {
 			try {
 				options.url = link;
-				const res = await axios(options);
-				const $ = load(res.data);
+				await page.goto(link);
+				const dynamicContent = await page.content();
+				const $ = load(dynamicContent);
 				const model = $(".product-info").find("h1").first().text();
 				const name = $(".product-info").find("h2").first().text();
 				const price = $(".product-info").find("div").first().text();
@@ -67,8 +72,11 @@ export class SNKRS {
 					.split("\n");
 				const description = descriptionAndSku[0];
 				const sku = descriptionAndSku[1].trim().replace("SKU: ", "");
-				var imageLinks = [];
-				//TODO: get image links
+
+				const imageLinks = await page.evaluate(() => {
+					const imgs = document.querySelectorAll("img");
+					return Array.from(imgs).map((img) => img.src);
+				});
 
 				logger.info("link: " + link);
 				logger.info("model: " + model);
@@ -77,6 +85,7 @@ export class SNKRS {
 				logger.info("releaseDate: " + releaseDate);
 				logger.info("releaseTime: " + releaseTime);
 				logger.info("description: " + description);
+				logger.info("images: " + imageLinks);
 				logger.info("sku: " + sku + "\n");
 			} catch (error) {
 				logger.error("Error parsing SNKRS release: " + error);
