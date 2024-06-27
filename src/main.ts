@@ -134,14 +134,14 @@ async function mainSnkrsNotifications(): Promise<void> {
 			const existingChannel = await discord.doesChannelExistUnderCategory(
 				client,
 				snkrsDrop.channelName,
-				constants.TEST.CATEGORY_ID
+				constants.SNKRS.CATEGORY_ID
 			);
 
 			if (!existingChannel) {
 				const snkrsCategory = await discord.getFullCategoryNameBySubstring(
 					client,
-					//"releases"
-					"TEST"
+					"releases"
+					//"TEST"
 				);
 				const snkrsReleaseChannel = await discord.createTextChannel(
 					client,
