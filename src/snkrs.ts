@@ -73,9 +73,13 @@ export class SNKRS {
 				const description = descriptionAndSku[0];
 				const sku = descriptionAndSku[1].trim().replace("SKU: ", "");
 
-				const imageLinks = await page.evaluate(() => {
+				var imageLinks = await page.evaluate(() => {
 					const imgs = document.querySelectorAll("img");
 					return Array.from(imgs).map((img) => img.src);
+				});
+
+				imageLinks = imageLinks.filter((i) => {
+					return i.includes("t_prod");
 				});
 
 				logger.info("link: " + link);
@@ -85,7 +89,9 @@ export class SNKRS {
 				logger.info("releaseDate: " + releaseDate);
 				logger.info("releaseTime: " + releaseTime);
 				logger.info("description: " + description);
-				logger.info("images: " + imageLinks);
+				for (const i of imageLinks) {
+					logger.info("images: " + i);
+				}
 				logger.info("sku: " + sku + "\n");
 			} catch (error) {
 				logger.error("Error parsing SNKRS release: " + error);
