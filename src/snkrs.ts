@@ -72,6 +72,7 @@ export class SNKRS {
 					.split("\n");
 				const description = descriptionAndSku[0];
 				const sku = descriptionAndSku[1].trim().replace("SKU: ", "");
+				const channelName = this.cleanChannelName(name, model, releaseDate);
 
 				var imageLinks = await page.evaluate(() => {
 					const imgs = document.querySelectorAll("img");
@@ -89,9 +90,7 @@ export class SNKRS {
 				logger.info("releaseDate: " + releaseDate);
 				logger.info("releaseTime: " + releaseTime);
 				logger.info("description: " + description);
-				for (const i of imageLinks) {
-					logger.info("images: " + i);
-				}
+				logger.info("channelName: " + channelName);
 				logger.info("sku: " + sku + "\n");
 			} catch (error) {
 				logger.error("Error parsing SNKRS release: " + error);
@@ -104,5 +103,20 @@ export class SNKRS {
 	parseDateTime(availableAt: string): string[] {
 		// [date, time]
 		return availableAt.split(" at ");
+	}
+
+	cleanChannelName(name: string, model: string, date: string): string {
+		var cleanedDate = date.replace("/", "-");
+		var cleanName = name
+			.replace(/\s+/g, "-")
+			.replace(/[^a-zA-Z0-9-]/g, "")
+			.toLowerCase();
+		var cleanModel = model
+			.replace("Air Jordan ", "aj")
+			.replace(/\s+/g, "-")
+			.replace(/[^a-zA-Z0-9-]/g, "")
+			.toLowerCase();
+
+		return `${cleanedDate}-${cleanModel}-${cleanName}`;
 	}
 }
