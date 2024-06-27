@@ -135,6 +135,7 @@ async function mainSnkrsNotifications(): Promise<void> {
 				client,
 				snkrsDrop.channelName,
 				constants.SNKRS.CATEGORY_ID
+				//constants.TEST.CATEGORY_ID
 			);
 
 			if (!existingChannel) {

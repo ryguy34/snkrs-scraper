@@ -31,11 +31,12 @@ export class Discord {
 		if (siteName === "Supreme") {
 			channelMessage = textChannelInfo.openingMessage.replace(
 				"Supreme",
-				"<@&834439456421314560>"
+				"<@&834439456421314560> Make sure to post W's in <#679913101269008483>"
 			);
 		} else if (siteName === "Palace") {
 			channelMessage =
-				textChannelInfo.openingMessage + " <@&834439872499417088>";
+				textChannelInfo.openingMessage +
+				" <@&834439872499417088>  Make sure to post W's in <#679913101269008483>";
 		} else {
 			logger.error("Uncaught site name");
 		}
@@ -82,7 +83,9 @@ export class Discord {
 		snkrsChannelInfo: SnkrsDropInfo,
 		channel: TextChannel
 	): Promise<void> {
-		channel.send("<@&834440275908755566>");
+		channel.send(
+			"<@&834440275908755566> Make sure to post W's in <#679913101269008483>"
+		);
 		var embed;
 		embed = new EmbedBuilder()
 			.setColor(0xcc0000)

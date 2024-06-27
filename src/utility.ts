@@ -74,10 +74,10 @@ export class Utility {
 	/**
 	 * Returns string type of numbered version of month passed in
 	 *
-	 * @param {string} month
+	 * @param {*} month
 	 * @returns
 	 */
-	static convertMonthToNumber(month) {
+	static convertMonthToNumber(month: string) {
 		switch (month) {
 			case "Jan":
 				return "01";
