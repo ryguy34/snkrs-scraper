@@ -2,6 +2,7 @@ const axios = require("axios");
 import { load } from "cheerio";
 import zlib from "zlib";
 import logger from "./config/logger";
+import { first } from "cheerio/lib/api/traversing";
 const SnkrsDropInfo = require("./vo/snkrsDropInfo");
 const constants = require("./constants");
 const Utility = require("./utility");
@@ -36,7 +37,8 @@ export class SNKRS {
 
 			$(".product-card").each((_: number, ele: any) => {
 				var link = $(ele).find("a").attr("href");
-				// TODO: need to make this logic better just incase there isa release after a event card
+				// TODO: need to make this logic better just incase there is a release after a event card
+				// look into the button under the card that has "learn more"
 				if (link!.startsWith("/launch")) {
 					// https://www.nike.com/launch/t/acg-rufus-sequoia
 					const productLink = `${constants.SNKRS.BASE_URL}${link}`.split(
@@ -46,21 +48,47 @@ export class SNKRS {
 					productLinks.push(productLink);
 				}
 			});
-			//logger.info(JSON.stringify(productLinks));
 		} catch (error) {
 			logger.error("Error gathering SNKRS release links: " + error);
 		}
 
-		for (const link in productLinks) {
+		for (const link of productLinks) {
 			try {
-				logger.info(link);
 				options.url = link;
 				const res = await axios(options);
 				const $ = load(res.data);
+				const model = $(".product-info").find("h1").first().text();
+				const regex = /[!@#$%^&*(),.?":{}|<>]/;
 
-				var type = $(".product-info").find("h1").text();
-				if (type) {
-					logger.info(type);
+				// TODO: need to see if we can make this logic more robust
+				if (
+					!model.includes("Just Dropped") &&
+					!model.includes("SNKRS") &&
+					!model.includes("Details") &&
+					!model.includes("Jordan Brand Styles") &&
+					!regex.test(model)
+				) {
+					const name = $(".product-info").find("h2").first().text();
+					const price = $(".product-info").find("div").first().text();
+					const availableAt = $(".product-info .test-available-date")
+						.find("div")
+						.text()
+						.replace("2:00 PM", "9:00 AM");
+					const descriptionAndSku = $(".product-info .description-text")
+						.find("p")
+						.first()
+						.text()
+						.split("\n");
+					const description = descriptionAndSku[0];
+					const sku = descriptionAndSku[1].trim().replace("SKU: ", "");
+					//TODO: get image links
+
+					logger.info(link);
+					logger.info("model: " + model);
+					// logger.info(name);
+					// logger.info(price);
+					// logger.info(availableAt);
+					logger.info(sku + "\n");
 				}
 			} catch (error) {
 				logger.error("Error parsing SNKRS release: " + error);
