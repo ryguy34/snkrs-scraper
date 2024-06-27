@@ -2,10 +2,7 @@ const axios = require("axios");
 import { load } from "cheerio";
 import zlib from "zlib";
 import logger from "./config/logger";
-import { first } from "cheerio/lib/api/traversing";
-const SnkrsDropInfo = require("./vo/snkrsDropInfo");
 const constants = require("./constants");
-const Utility = require("./utility");
 
 export class SNKRS {
 	constructor() {}
