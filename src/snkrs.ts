@@ -1,8 +1,9 @@
 const axios = require("axios");
 import { load } from "cheerio";
+import puppeteer from "puppeteer";
 import zlib from "zlib";
 import logger from "./config/logger";
-import puppeteer from "puppeteer";
+import { SnkrsDropInfo } from "./vo/snkrs/snkrsDropInfo";
 const constants = require("./constants");
 
 export class SNKRS {
@@ -31,7 +32,6 @@ export class SNKRS {
 		try {
 			const res = await axios(options);
 			const $ = load(res.data);
-			const rootElement = $("#root");
 
 			$(".product-card").each((_: number, ele: any) => {
 				var link = $(ele).find("a").attr("href");
@@ -82,6 +82,19 @@ export class SNKRS {
 				imageLinks = imageLinks.filter((i) => {
 					return i.includes("t_prod");
 				});
+				const snrksDropInfo = new SnkrsDropInfo(
+					channelName,
+					`${model} ${name}`,
+					imageLinks,
+					price,
+					model,
+					name,
+					releaseDate,
+					releaseTime,
+					description,
+					sku,
+					link
+				);
 
 				logger.info("link: " + link);
 				logger.info("model: " + model);

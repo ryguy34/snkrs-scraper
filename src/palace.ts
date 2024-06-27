@@ -1,7 +1,7 @@
 import axios from "axios";
 import { load } from "cheerio";
-import { PalaceDropInfo } from "./vo/palaceDropInfo";
-import { TextChannelInfo } from "./vo/textChannelInfo";
+import { ShopifyDropInfo } from "./vo/shopify/shopifyDropInfo";
+import { ShopifyChannelInfo } from "./vo/shopify/shopifyChannelInfo";
 import logger from "./config/logger";
 
 const constants = require("./constants");
@@ -10,7 +10,7 @@ export class Palace {
 	constructor() {}
 
 	async parsePalaceDrop(currentWeekFridayDate: string) {
-		var productList: PalaceDropInfo[] = [];
+		var productList: ShopifyDropInfo[] = [];
 		var palaceDiscordTextChannelInfo;
 
 		try {
@@ -61,7 +61,7 @@ export class Palace {
 					constants.PALACE_BASE_URL
 				}/collections/${category?.toLowerCase()}`;
 				var price = price === "" ? "???" : price;
-				var palaceDropInfo = new PalaceDropInfo(
+				var palaceDropInfo = new ShopifyDropInfo(
 					productName!,
 					productInfoUrl,
 					imageUrl,
@@ -71,7 +71,10 @@ export class Palace {
 				productList.push(palaceDropInfo);
 			});
 
-			palaceDiscordTextChannelInfo = new TextChannelInfo(channelName, title);
+			palaceDiscordTextChannelInfo = new ShopifyChannelInfo(
+				channelName,
+				title
+			);
 			palaceDiscordTextChannelInfo.products = productList;
 		} catch (error) {
 			logger.error(error);

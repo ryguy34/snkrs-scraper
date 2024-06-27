@@ -7,7 +7,8 @@ import {
 } from "discord.js";
 import "dotenv/config";
 import fs from "fs";
-import { TextChannelInfo } from "./vo/textChannelInfo";
+import { ShopifyChannelInfo } from "./vo/shopify/shopifyChannelInfo";
+import { SnkrsDropInfo } from "./vo/snkrs/snkrsDropInfo";
 import logger from "./config/logger";
 
 export class Discord {
@@ -22,7 +23,7 @@ export class Discord {
 	 * @returns
 	 */
 	async sendDropInfo(
-		textChannelInfo: TextChannelInfo,
+		textChannelInfo: ShopifyChannelInfo,
 		channel: TextChannel,
 		siteName: string
 	) {
@@ -35,6 +36,8 @@ export class Discord {
 		} else if (siteName === "Palace") {
 			channelMessage =
 				textChannelInfo.openingMessage + " <@&834439872499417088>";
+		} else {
+			logger.error("Uncaught site name");
 		}
 
 		channel.send(channelMessage);
@@ -59,6 +62,8 @@ export class Discord {
 					iconURL: "attachment://logo.png",
 				});
 
+			embed.addFields();
+
 			const image = fs.readFileSync("./resources/logo.png");
 
 			await channel.send({
@@ -66,6 +71,55 @@ export class Discord {
 				files: [{ attachment: image, name: "logo.png" }],
 			});
 		}
+	}
+
+	/**
+	 * makes a list of embeds for the upcoming products
+	 *
+	 * @param {*} textChannelInfo
+	 * @param {*} channel
+	 * @param {*} siteName
+	 * @returns
+	 */
+	async sendSnkrsDropInfo(
+		snkrsChannelInfo: SnkrsDropInfo,
+		channel: TextChannel
+	) {
+		channel.send("<@&834440275908755566>");
+		var embed;
+		embed = new EmbedBuilder()
+			.setColor(0xcc0000)
+			.setTitle(snkrsChannelInfo.title)
+			.setURL(snkrsChannelInfo.link)
+			.setDescription(snkrsChannelInfo.description)
+			.setThumbnail("attachment://logo.png")
+			.addFields(
+				{ name: "Price", value: snkrsChannelInfo.price },
+				{ name: "Date", value: snkrsChannelInfo.releaseDate },
+				{ name: "Time", value: snkrsChannelInfo.releaseTime }
+			)
+			.setTimestamp()
+			.setFooter({
+				text: `Good luck on the upcoming SNKRS drops!!!`,
+				iconURL: "attachment://logo.png",
+			});
+
+		var embeds = [];
+		embeds.push(embed);
+		for (const image of snkrsChannelInfo.imageUrls) {
+			var imageEmbed = new EmbedBuilder()
+				.setURL(snkrsChannelInfo.link)
+				.setImage(image);
+
+			embeds.push(imageEmbed);
+		}
+
+		const image = fs.readFileSync("./resources/logo.png");
+
+		await channel.send({
+			embeds: embeds,
+			files: [{ attachment: image, name: "logo.png" }],
+		});
 	}
 
 	/**
