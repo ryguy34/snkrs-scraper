@@ -60,7 +60,11 @@ export class SNKRS {
 				const availableAt = $(".product-info .test-available-date")
 					.find("div")
 					.text()
-					.replace("2:00 PM", "9:00 AM");
+					.replace("2:00 PM", "9:00 AM")
+					.replace("Available ", "");
+				const dateTime = this.parseDateTime(availableAt);
+				const releaseDate = dateTime[0];
+				const releaseTime = dateTime[1];
 				const descriptionAndSku = $(".product-info .description-text")
 					.find("p")
 					.first()
@@ -70,17 +74,24 @@ export class SNKRS {
 				const sku = descriptionAndSku[1].trim().replace("SKU: ", "");
 				//TODO: get image links
 
-				logger.info(link);
+				logger.info("link: " + link);
 				logger.info("model: " + model);
-				// logger.info(name);
-				// logger.info(price);
-				// logger.info(availableAt);
-				logger.info(sku + "\n");
+				logger.info("name: " + name);
+				logger.info("price: " + price);
+				logger.info("releaseDate: " + releaseDate);
+				logger.info("releaseTime: " + releaseTime);
+				logger.info("description: " + description);
+				logger.info("sku: " + sku + "\n");
 			} catch (error) {
 				logger.error("Error parsing SNKRS release: " + error);
 			}
 		}
 
 		return itemsReleasing;
+	}
+
+	parseDateTime(availableAt: string): string[] {
+		// [date, time]
+		return availableAt.split(" at ");
 	}
 }
